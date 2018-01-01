@@ -1,0 +1,18 @@
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
+public class rsa
+{
+    
+    public static void main(String argv[])
+    {
+	 
+	
+	Random rng = new Random();
+
+	p = BigInteger.probablePrime(32, rng);
+	q = BigInteger.probablePrime(32, rng);
+
+	System.out.println(BigInteger.ZERO);
+    }
+}
