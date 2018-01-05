@@ -1,3 +1,10 @@
 # class file
 rsa/*.class
 additive-cipher/*.class
+
+# .idea file
+.idea/*
+.idea
+
+out/*
+out
