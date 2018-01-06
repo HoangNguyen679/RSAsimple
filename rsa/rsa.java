@@ -1,30 +1,29 @@
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Scanner;
 
 public class rsa {
     private final static SecureRandom random = new SecureRandom();
     private final static BigInteger one = BigInteger.ONE;
 
     private BigInteger n;
+    private BigInteger m;
     private BigInteger e;
     private BigInteger d;
 
-    rsa() {
-//	BigInteger p = BigInteger.probablePrime(32, random);
-//	BigInteger q = BigInteger.probablePrime(32, random);
-
-        BigInteger p = new BigInteger("19");
-        BigInteger q = new BigInteger("23");
+    public rsa() {
+        BigInteger p = BigInteger.probablePrime(32, random);
+        BigInteger q = BigInteger.probablePrime(32, random);
 
         n = p.multiply(q);
-        BigInteger m = (p.subtract(one)).multiply(q.subtract(one));
+        m = (p.subtract(one)).multiply(q.subtract(one));
 
-//        do {
-//            e = BigInteger.probablePrime(16, random);
-//        } while ((m.gcd(e)).equals(one) != true);
+        do {
+            e = BigInteger.probablePrime(16, random);
+        } while ((m.gcd(e)).equals(one) != true);
 
-        e = new BigInteger("113");
 
         d = e.modInverse(m);
     }
@@ -37,34 +36,31 @@ public class rsa {
         return encrypt.modPow(d, n);
     }
 
-    public static void main(String argv[]) throws IOException {
-
+    public void rsaNumber() {
         rsa key = new rsa();
-
-        BigInteger message = new BigInteger("50");
+        Scanner in = new Scanner(System.in);
+        int num = in.nextInt();
+        BigInteger bI = new BigInteger(Integer.toString(num));
 
         String s = "";
-        s += "message: " + message + "\n";
-        s += "encrypt: " + key.encrypt(message) + "\n";
-        s += "decrypt: " + key.decrypt(key.encrypt(message)) + "\n";
-
+        s += "message: " + bI + "\n";
+        s += "encrypt: " + key.encrypt(bI) + "\n";
         System.out.println(s);
 
-        ReadInput ri = new ReadInput();
-        byte[] b = null;
-        b = ri.readFile();
-        System.out.println(new String(b));
+    }
 
-        int i = 0;
-        do {
-            byte[] tmp = new byte[2];
-            tmp[0] = b[i];
-            tmp[1] = b[i + 1];
-            BigInteger bigI = new BigInteger(tmp);
-            BigInteger out = key.encrypt(bigI);
-            //System.out.print(out);
-            System.out.print(out.toString());
-            i = i + 2;
-        } while (i < b.length);
+    public static void main(String argv[]) throws IOException {
+        rsa key = new rsa();
+
+        FileHandle ri = new FileHandle();
+        byte[] b = ri.readFile();
+
+        BigInteger bigI = new BigInteger(b);
+        BigInteger bigIEncrypt = key.encrypt(bigI);
+
+        byte[] b_out = bigIEncrypt.toByteArray();
+        ri.writeFile(b_out);
+
+        System.out.println("\nDone Encrypt");
     }
 }
